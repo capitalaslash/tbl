@@ -1,0 +1,14 @@
+# This is a Spack Environment file.
+#
+# It describes a set of packages to be installed, along with
+# configuration settings.
+spack:
+  # add package specs to the `specs` list
+  specs:
+  - eigen@3.4.0
+  - libmesh@master+eigen+exodusii~mpi~petsc threads=openmp
+  - openblas
+  - cgal@5.5.2+eigen
+  view: true
+  concretizer:
+    unify: true
