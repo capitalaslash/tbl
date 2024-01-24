@@ -39,3 +39,24 @@ Build a structured boundary layer near walls for turbulent simulations.
 
 - `spack`
 
+### Installation
+
+Using `spack`: use the dedicated environment
+
+```bash
+spack env activate spack_env
+spack concretize -f
+spack install
+```
+
+After that, check that all required packages are available
+
+```bash
+$> spack find
+==> In environment .../tbl/spack_env
+==> Root specs
+cgal@5.5.2 +eigen  eigen@3.4.0   libmesh@master +eigen+exodusii~mpi~petsc threads=openmp  openblas
+
+==> Installed packages
+...
+```
