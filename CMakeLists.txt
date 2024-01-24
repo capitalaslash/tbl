@@ -19,11 +19,23 @@ FetchContent_MakeAvailable(fmt)
 
 include(FeatureSummary)
 
+# eigen
 find_package(Eigen3 REQUIRED NO_MODULE)
 
+# libmesh
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(libmesh REQUIRED IMPORTED_TARGET libmesh)
+# workaround for bogus libmesh include path
+get_target_property(
+  LIBMESH_INCLUDE_DIRECTORIES PkgConfig::libmesh INTERFACE_INCLUDE_DIRECTORIES)
+list(REMOVE_ITEM LIBMESH_INCLUDE_DIRECTORIES "/usr/include/tirpc")
+set_property(TARGET PkgConfig::libmesh
+  PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${LIBMESH_INCLUDE_DIRECTORIES})
+
+# igl
 find_package(libigl REQUIRED)
+
+# cgal
 list(APPEND CMAKE_MODULE_PATH "$ENV{SPACK_ENV}/.spack-env/view/lib/cmake/CGAL")
 set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
 include(CGALConfig)
