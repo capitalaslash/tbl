@@ -2,7 +2,7 @@
 
 Build a structured boundary layer near walls for turbulent simulations.
 
-Steps:
+## Task list
 
 - [ ] define a suitable `struct`/`class` that stores information on the geometry and
   mesh features
@@ -22,4 +22,20 @@ Steps:
 
 - [ ] combine the strcutured boundary layer mesh with the unstructured mesh on the
   outside
+
+## External libraries
+
+- `libmesh`
+
+- `igl`
+
+- `cgal` (optional)
+
+### Dependencies
+
+- `eigen`
+
+- `openblas`
+
+- `spack`
 
