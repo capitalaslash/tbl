@@ -33,7 +33,12 @@ set_property(TARGET PkgConfig::libmesh
   PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${LIBMESH_INCLUDE_DIRECTORIES})
 
 # igl
-find_package(libigl REQUIRED)
+# find_package(libigl REQUIRED
+#   PATHS ${CMAKE_SOURCE_DIR}/contrib/libigl-install
+# )
+add_library(igl_core INTERFACE)
+target_include_directories(igl_core SYSTEM INTERFACE ${CMAKE_SOURCE_DIR}/contrib/libigl/include)
+add_library(igl::igl_core ALIAS igl_core)
 
 # cgal
 list(APPEND CMAKE_MODULE_PATH "$ENV{SPACK_ENV}/.spack-env/view/lib/cmake/CGAL")
