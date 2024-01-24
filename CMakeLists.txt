@@ -37,6 +37,7 @@ find_package(libigl REQUIRED)
 
 # cgal
 list(APPEND CMAKE_MODULE_PATH "$ENV{SPACK_ENV}/.spack-env/view/lib/cmake/CGAL")
+list(APPEND CMAKE_MODULE_PATH "$ENV{SPACK_ENV}/.spack-env/view/lib64/cmake/CGAL")
 set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
 include(CGALConfig)
 include(UseCGAL)
