@@ -1,3 +1,4 @@
+.cache/*
 build/*
 spack_env/*
 contrib/libigl-install/*
