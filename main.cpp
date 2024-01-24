@@ -17,8 +17,10 @@
 #include <libmesh/vector_value.h>
 #include <libmesh/zero_function.h>
 
-#include <igl/delaunay_triangulation.h>
+// #include <igl/delaunay_triangulation.h>
 #include <igl/isolines.h>
+
+#include <Eigen/Dense>
 
 void assemble_distance(libMesh::EquationSystems & es, std::string const & name);
 
@@ -28,9 +30,9 @@ int main(int argc, char * argv[])
 
   libMesh::Mesh mesh{init.comm()};
 
-  uint const n = 20;
+  uint const n = 4;
   libMesh::MeshTools::Generation::build_square(
-      mesh, n, n, 0.0, 1.0, 0.0, 1.0, libMesh::QUAD4);
+      mesh, n, n, 0.0, 1.0, 0.0, 1.0, libMesh::TRI3);
 
   mesh.print_info();
 
@@ -58,6 +60,57 @@ int main(int argc, char * argv[])
 
   libMesh::ExodusII_IO io{mesh};
   io.write_timestep("out.e", es, 1, 0.0);
+
+  Eigen::MatrixXd pts(4, 2);
+  Eigen::MatrixXi conn(2, 3);
+  Eigen::VectorXd sol(4);
+
+  // fill points from libmesh using
+  // mesh.point().x
+  pts(0, 0) = 0.0;
+  pts(0, 1) = 0.0;
+
+  pts(1, 0) = 1.0;
+  pts(1, 1) = 0.0;
+
+  pts(2, 0) = 1.0;
+  pts(2, 1) = 1.0;
+
+  pts(3, 0) = 0.0;
+  pts(3, 1) = 1.0;
+
+  // fill connectivity from libmesh using
+  // mesh.elem_ptr()->connectivity
+  conn(0, 0) = 0;
+  conn(1, 0) = 1;
+  conn(2, 0) = 2;
+
+  conn(0, 0) = 0;
+  conn(1, 0) = 2;
+  conn(2, 0) = 3;
+
+  // fill solution vector from libmesh using
+  // system.solution (libMesh::NumericVector)
+  sol(0) = 0.0;
+  sol(1) = 2.0;
+  sol(2) = 4.0;
+  sol(3) = 0.0;
+
+  // select isovalues to compute
+  Eigen::VectorXd isovalues(1);
+  isovalues << 1.0;
+
+  // output object for the isoline calculation
+  Eigen::MatrixXd isopts;
+  Eigen::MatrixXi isoconn;
+  Eigen::VectorXi isoindices;
+
+  igl::isolines(pts, conn, sol, isovalues, isopts, isoconn, isoindices);
+
+  // print out results
+  std::cout << "isopts: " << isopts << std::endl;
+  std::cout << "isoconn: " << isoconn << std::endl;
+  std::cout << "isoindices: " << isoindices << std::endl;
 
   return 0;
 }
